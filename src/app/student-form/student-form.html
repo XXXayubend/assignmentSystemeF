@@ -1,0 +1,20 @@
+<div class="mx-12">
+    <h3 class="mx-7"> {{id ? "Update Student" : "Create Student"}} </h3>
+
+    <form (ngSubmit)="upsert()" class="mt-4 mx-9 space-y-4">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="w-full" id="name" name="name" placeholder="Entre your name" [(ngModel)]="student.name" />
+        </div>
+        <div class="form-group">
+            <label for="average">Average</label>
+            <input type="text" class="w-full" id="avearge" name="average" placeholder="Entre your average" [(ngModel)]="student.average" />
+        </div>
+        <div class="form-group">
+            <label for="outOfRange" class="text-red-900">
+                {{ isOutOfRange ? "Average mus be a number betwen 8 and 10!" : ""}}
+            </label>
+        </div>
+        <button type="submit">{{ id ? "Update" : "Submit"}}</button>
+    </form>
+</div>
