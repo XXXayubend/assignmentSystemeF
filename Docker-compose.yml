@@ -1,0 +1,45 @@
+services:
+    mysql-db:
+      image: mysql:8.0
+      container_name: mysql_db
+      environment:
+        MYSQL_PORT_PASSWORD: root
+        MYSQL_DATABASE: assignment_db
+      ports:
+        - "3306:3306"
+      
+      healthcheck:
+        test:
+          ["CMD", "mysqladmin", "ping", "-h", "localhist", "-u", "-port"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+
+      # Spring Boot Application
+
+      spring-backend:
+        build:
+          context: ./project_assignment(backend)
+          dockerfile: Dockerfile
+        image: 
+        container_name: spring-backend
+        ports:
+          - "9090:9090"
+        environment:
+          - MYSQL_HOST=mysql-db # mysql-db is our mysql`container name and  this environment variable is predefined in spring boot application.propreties
+        depends_on:
+          mysql-db:
+            condition: service_healthy
+          restart: unless-stopped
+
+      angular-frontend:
+        build:
+          context: ./project_assignment(frontend)
+          dockerfile: Dockerfile
+        image: 
+        container_name: angular-frontend
+        ports: 
+          - "4200:4200"
+        depends_on:
+          - spring-backend
+        restart: unless-stopped
